@@ -6,7 +6,7 @@ This workshop is all about spreading holiday cheer with the help of AI and GitHu
 
 ## Workshop Ideas
 
-### 1. Write a Letter to Santa 🎅✉️
+### [1. Write a Letter to Santa 🎅✉️](./santa-letter/santa-instructions.md)
 Create an app where users can write letters to Santa Claus. The app will send the letter to Santa and receive a warm and friendly response. Perfect for kids and the young at heart!
 
 ### 2. Design Your Christmas Tree 🎄🎨
