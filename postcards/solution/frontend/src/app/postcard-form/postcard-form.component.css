@@ -1,0 +1,41 @@
+form {
+  background-color: #f0fff0;
+  padding: 20px;
+  border: 1px solid #ddd;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: #006400;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 15px;
+  background-color: #8b0000;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #a52a2a;
+}
+
+h2 {
+  color: #228b22;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 15px;
+}

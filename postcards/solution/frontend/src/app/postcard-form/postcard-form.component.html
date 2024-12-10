@@ -1,0 +1,21 @@
+<p>postcard-form works!</p>
+
+<form (ngSubmit)="onSubmit()">
+  <label for="name">Your Name:</label>
+  <input id="name" [(ngModel)]="name" name="name" required />
+
+  <label for="email">Your Email:</label>
+  <input id="email" [(ngModel)]="email" name="email" type="email" required />
+
+  <label for="description">Describe your postcard:</label>
+  <textarea id="description" [(ngModel)]="description" name="description" required></textarea>
+
+  <button type="submit">Create My Xmas Postcard</button>
+</form>
+
+<div *ngIf="postcard">
+  <h2>Your AI-Generated Xmas Postcard</h2>
+  <img [src]="'data:image/png;base64,' + postcard.imageData" alt="Postcard Image" />
+  <p>{{ postcard.text }}</p>
+  <button (click)="sendPostcard()">Send Postcard via Email</button>
+</div>
