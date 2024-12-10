@@ -31,7 +31,7 @@ def send_letter(letter: Letter):
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ],
-        max_tokens=150
+        max_tokens=500
     )
     
     print(response.choices[0].message.content.strip())
