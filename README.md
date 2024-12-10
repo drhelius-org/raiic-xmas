@@ -12,7 +12,7 @@ Create an app where users can write letters to Santa Claus. The app will send th
 ### 2. Design Your Christmas Tree 🎄🎨
 Build an app that helps users design their perfect Christmas tree. Using AI, the app will suggest decorations and arrangements based on user preferences. Make your tree the talk of the town!
 
-### 3. Create and Send Email Postcards 📬🖼️
+### [3. Create and Send Email Postcards 📬🖼️](./postcards/postcards-instructions.md)
 Develop an app to create and send email postcards. The app will use AI to generate beautiful postcard images and personalized messages. Share the holiday spirit with friends and family through stunning digital postcards!
 
 ## Getting Started
