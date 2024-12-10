@@ -1,17 +1,23 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr
-import openai
+from openai import AzureOpenAI
 import requests
 from dotenv import load_dotenv
 import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 import base64
+import json
+import traceback
 
 load_dotenv()
+
+client = AzureOpenAI(
+    azure_endpoint=os.getenv("OPENAI_API_BASE"),
+    api_key=os.getenv("OPENAI_API_KEY"),
+    api_version="2024-10-21"
+)
 
 app = FastAPI()
 
@@ -19,11 +25,6 @@ app = FastAPI()
 class Postcard(BaseModel):
     imageData: str  # Base64 encoded image data
     text: str
-
-# Azure OpenAI and Dall-e-3 configuration
-openai.api_key = os.getenv("OPENAI_API_KEY")
-dalle_api_url = os.getenv("DALLE_API_URL")
-dalle_api_key = os.getenv("DALLE_API_KEY")
 
 # Email configuration
 smtp_server = os.getenv("SMTP_SERVER")
@@ -35,31 +36,57 @@ class EmailRequest(BaseModel):
     recipient_email: EmailStr
     postcard: Postcard
 
+class GeneratePostcardRequest(BaseModel):
+    name: str
+    email: EmailStr
+    description: str
+
 @app.post("/generate_postcard", response_model=Postcard)
-async def generate_postcard(user_instructions: str):
+async def generate_postcard(request: GeneratePostcardRequest):
     try:
         # Generate postcard text using GPT-4
-        gpt_response = openai.ChatCompletion.create(
-            model="gpt-4",
+        gpt_response = client.chat.completions.create(
+            model="gpt-4o",
             messages=[
-                {"role": "system", "content": "Generate a warm and friendly Christmas postcard text."},
-                {"role": "user", "content": user_instructions}
+                {"role": "system", "content": "You are part of an automatic system that generates warm, inspiring and friendly Christmas postcard texts. You receive a description of the postcard content and generate a text in no more than 2 paragraphs. Use emojis and be creative!"},
+                {"role": "user", "content": request.description}
             ],
-            max_tokens=150
+            max_tokens=500
         )
-        postcard_text = gpt_response.choices[0].message['content'].strip()
+        postcard_text = gpt_response.choices[0].message.content.strip()
+
+        print("Postcard text:\n" + postcard_text)
+
+        gpt_dalle_prompt_response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are part of an automatic system that generates warm, inspiring and friendly Christmas postcards. You receive a description of the postcard content and generate a prompt that will be used later in Dall-e-3 model to generate the postcard image using AI. Answer only with a prompt that will be used in the next step."},
+                {"role": "user", "content": request.description}
+            ],
+            max_tokens=500
+        )
+
+        gpt_dalle_prompt = gpt_dalle_prompt_response.choices[0].message.content.strip()
+
+        print("Dalle prompt:\n" + gpt_dalle_prompt)
 
         # Generate postcard image using Dall-e-3
-        dalle_response = requests.post(
-            dalle_api_url,
-            headers={"Authorization": f"Bearer {dalle_api_key}"},
-            json={"prompt": "Christmas postcard image"}
+        dalle_response = client.images.generate(
+            model="dall-e-3",
+            prompt=gpt_dalle_prompt,
+            n=1,
+            size="1024x1024",
+            response_format="b64_json"
         )
-        dalle_response.raise_for_status()
-        image_data = dalle_response.json()["data"]
+
+        image_data = dalle_response.data[0].b64_json
+
+        print("Image data:\n" + image_data[:50])
 
         return Postcard(imageData=image_data, text=postcard_text)
     except Exception as e:
+        print("Exception occurred:", e)
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/send_postcard")
@@ -96,4 +123,6 @@ async def send_postcard(email_request: EmailRequest):
 
         return {"message": "Postcard sent successfully"}
     except Exception as e:
+        print("Exception occurred:", e)
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
