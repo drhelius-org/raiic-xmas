@@ -15,6 +15,12 @@ Build an app that helps users design their perfect Christmas tree. Using AI, the
 ### [3. Create and Send Email Postcards 📬🖼️](./postcards/postcards-instructions.md)
 Develop an app to create and send email postcards. The app will use AI to generate beautiful postcard images and personalized messages. Share the holiday spirit with friends and family through stunning digital postcards!
 
+### 4. Detect Your Family Level of "Cuñadismo" 🍷😅
+Create a light-hearted app where users can paste a text snippet or record a short voice message from a family dinner. The AI will analyze the comment and determine its “cuñadismo level,” offering a playful rating along with a suggested diplomatic comeback. To top it off, the app can generate a humorous, Christmas-themed meme summarizing the result!
+
+### 5. The Anti-Santa Excuse Generator 🏃🎅❌
+Build an app for those who want to creatively avoid Christmas commitments. Users describe their situation, and the AI produces a witty and “semi-official” excuse for skipping a holiday event. The app can even craft a downloadable PDF justification and provide a tongue-in-cheek analysis of the social consequences of the escape plan.
+
 ## Getting Started
 
 1. Clone the repository.
@@ -22,4 +28,4 @@ Develop an app to create and send email postcards. The app will use AI to genera
 3. Follow the instructions in the respective folders to set up your project.
 4. Have fun and let your creativity shine! 🌟
 
-Happy coding and happy holidays! 🎄🎅✨
+Happy coding and happy Merry Xmas! 🎄🎅✨
